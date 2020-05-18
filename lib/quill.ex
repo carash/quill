@@ -6,13 +6,11 @@ defmodule Quill do
   @behaviour :gen_event
 
   def init(__MODULE__) do
-    # TODO create state from options
-    {:ok, %{}}
+    {:ok, configure(Application.get_env(:logger, Quill, []), default_state())}
   end
 
-  def handle_call({:configure, _options}, state) do
-    # TODO update state with options
-    {:ok, :ok, state}
+  def handle_call({:configure, options}, state) do
+    {:ok, :ok, configure(options, state)}
   end
 
   def handle_info(_msg, state) do
@@ -28,6 +26,7 @@ defmodule Quill do
   end
 
 
+
   def handle_event(:flush, state) do
     {:ok, state}
   end
@@ -39,5 +38,20 @@ defmodule Quill do
   def handle_event({_level, _, {Logger, _message, _timestamp, _metadata}}, state) do
     # TODO output log
     {:ok, state}
+  end
+
+
+
+  defp configure(options, state) do
+    state
+    |> Map.merge(Enum.into(options, %{}))
+  end
+
+  defp default_state do
+    %{
+      level: :debug,
+      io_device: :stdio,
+      metadata: nil,
+    }
   end
 end

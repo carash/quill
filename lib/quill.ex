@@ -3,7 +3,7 @@ defmodule Quill do
   Documentation for Quill.
   """
 
-  alias Quill.Builder
+  alias Quill.{Builder, Encoder}
 
   @behaviour :gen_event
 
@@ -41,6 +41,8 @@ defmodule Quill do
     %{}
     |> Builder.add_base_fields(message, level, timestamp, state)
     |> Builder.add_metadata_fields(metadata, state)
+    |> Encoder.encode()
+    |> output_log(state)
     {:ok, state}
   end
 
@@ -58,5 +60,9 @@ defmodule Quill do
       metadata: nil,
       version: 0,
     }
+  end
+
+  defp output_log(msg, config) do
+    IO.puts(config.io_device, msg)
   end
 end

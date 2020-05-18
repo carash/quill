@@ -38,11 +38,15 @@ defmodule Quill do
   end
 
   def handle_event({level, _, {Logger, message, timestamp, metadata}}, state) do
-    %{}
-    |> Builder.add_base_fields(message, level, timestamp, state)
-    |> Builder.add_metadata_fields(metadata, state)
-    |> Encoder.encode()
-    |> output_log(state)
+    try do
+      %{}
+      |> Builder.add_base_fields(message, level, timestamp, state)
+      |> Builder.add_metadata_fields(metadata, state)
+      |> Encoder.encode()
+      |> output_log(state)
+    rescue
+      e -> output_error(e, state)
+    end
     {:ok, state}
   end
 
@@ -57,6 +61,7 @@ defmodule Quill do
     %{
       level: :debug,
       io_device: :stdio,
+      log_error: true,
       metadata: nil,
       version: 0,
     }
@@ -64,5 +69,12 @@ defmodule Quill do
 
   defp output_log(msg, config) do
     IO.puts(config.io_device, msg)
+  end
+
+  defp output_error(e, config) do
+    case config.log_error do
+      true -> IO.puts(config.io_device, inspect(e))
+      _ -> :ok
+    end
   end
 end

@@ -29,7 +29,7 @@ defmodule Quill.Builder do
 
 
   defp get_name(config) do
-    Keyword.fetch!(config, :name)
+    config.name
   end
 
   # defp get_level_rank(level) do
@@ -46,7 +46,7 @@ defmodule Quill.Builder do
   # end
 
   defp get_version(config) do
-    Keyword.fetch!(config, :version)
+    config.version
   end
 
   defp filter_metadata(metadata, %{metadata: nil}) do

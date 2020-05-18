@@ -3,6 +3,8 @@ defmodule Quill do
   Documentation for Quill.
   """
 
+  alias Quill.Builder
+
   @behaviour :gen_event
 
   def init(__MODULE__) do
@@ -35,8 +37,10 @@ defmodule Quill do
     {:ok, state}
   end
 
-  def handle_event({_level, _, {Logger, _message, _timestamp, _metadata}}, state) do
-    # TODO output log
+  def handle_event({level, _, {Logger, message, timestamp, metadata}}, state) do
+    %{}
+    |> Builder.add_base_fields(message, level, timestamp, state)
+    |> Builder.add_metadata_fields(metadata, state)
     {:ok, state}
   end
 
@@ -52,6 +56,7 @@ defmodule Quill do
       level: :debug,
       io_device: :stdio,
       metadata: nil,
+      version: 0,
     }
   end
 end

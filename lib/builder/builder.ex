@@ -13,7 +13,7 @@ defmodule Quill.Builder do
       name: get_name(config),
       level: level,
       message: message,
-      timestamp: timestamp,
+      timestamp: get_formatted_timestamp(timestamp),
       version: get_version(config),
     })
   end
@@ -23,13 +23,20 @@ defmodule Quill.Builder do
     |> Map.merge(metadata
                  |> filter_metadata(config)
                  |> Enum.into(%{})
-                 |> Map.delete(:time))
+                 |> Map.delete(:timestamp))
   end
 
 
 
   defp get_name(config) do
     config.name
+  end
+
+  defp get_formatted_timestamp({date, {hours, minutes, seconds, microsecond}}) do
+    {date, {hours, minutes, seconds}}
+    |> NaiveDateTime.from_erl!({microsecond * 1000, 3})
+    |> DateTime.from_naive!("Etc/UTC")
+    |> DateTime.to_iso8601()
   end
 
   # defp get_level_rank(level) do

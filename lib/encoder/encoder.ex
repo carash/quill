@@ -25,10 +25,10 @@ defmodule Quill.Encoder do
   end
 
   defp force_map(value) when is_pid(value) or
-                                is_port(value) or
-                                is_reference(value) or
-                                is_tuple(value) or
-                                is_function(value), do: inspect(value)
+                             is_port(value) or
+                             is_reference(value) or
+                             is_tuple(value) or
+                             is_function(value), do: inspect(value)
 
   defp force_map(value), do: value
 end

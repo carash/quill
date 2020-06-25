@@ -37,20 +37,33 @@ defmodule Quill do
     {:ok, state}
   end
 
-  def handle_event({level, _, {Logger, message, timestamp, metadata}}, state) do
-    try do
-      %{}
-      |> Builder.add_base_fields(message, level, timestamp, state)
-      |> Builder.add_metadata_fields(metadata, state)
-      |> Encoder.encode()
-      |> output_log(state)
-    rescue
-      e -> output_error(e, state)
+  def handle_event({level, _, {Logger, message, timestamp, metadata}}, state = %{level: min_level}) do
+    if level_priority(level) >= level_priority(min_level) do
+      try do
+        %{}
+        |> Builder.add_base_fields(message, level, timestamp, state)
+        |> Builder.add_metadata_fields(metadata, state)
+        |> Encoder.encode()
+        |> output_log(state)
+      rescue
+        e -> output_error(e, state)
+      end
     end
     {:ok, state}
   end
 
 
+
+  defp level_priority(:trace), do: 0
+  defp level_priority(:debug), do: 10
+  defp level_priority(:info), do: 20
+  defp level_priority(:notice), do: 30
+  defp level_priority(:warning), do: 40
+  defp level_priority(:error), do: 50
+  defp level_priority(:critical), do: 60
+  defp level_priority(:alert), do: 70
+  defp level_priority(:emergency), do: 80
+  defp level_priority(_), do: -10
 
   defp configure(options, state) do
     state
@@ -59,7 +72,7 @@ defmodule Quill do
 
   defp default_state do
     %{
-      level: :debug,
+      level: :info,
       io_device: :stdio,
       log_error: true,
       metadata: nil,

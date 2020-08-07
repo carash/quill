@@ -77,6 +77,10 @@ defmodule Quill do
       log_error: true,
       metadata: nil,
       version: 0,
+      custom_censor_regex: nil,
+      email_censor_type: nil,
+      phone_number_censor_type: nil,
+      phone_number_prefix: [],
     }
   end
 

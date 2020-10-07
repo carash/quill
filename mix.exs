@@ -1,30 +1,33 @@
 defmodule Quill.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/carash/quill"
+  @version "0.2.1"
+
   def project do
     [
       app: :quill,
-      version: "0.2.1",
+      version: @version,
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
-      deps: deps(),
       name: "Quill",
+      homepage_url: @source_url,
+      deps: deps(),
       description: description(),
-      package: package(),
-      source_url: "https://github.com/carash/quill",
-      homepage_url: "https://github.com/carash/quill",
+      docs: docs(),
+      package: package()
     ]
   end
 
   defp deps do
     [
       {:jason, "~> 1.2"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
   defp description() do
-    "Simple Json logger backend for Elixir."
+    "Simple JSON logger backend for Elixir."
   end
 
   defp package() do
@@ -33,6 +36,17 @@ defmodule Quill.MixProject do
       licenses: ["MIT"],
       files: ["lib/", "mix.exs", "README.md", "LICENSE"],
       links: %{"GitHub" => "https://github.com/carash/quill"}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      source_ref: "v#{@version}",
+      source_url: @source_url,
+      extras: [
+        "README.md"
+      ]
     ]
   end
 end

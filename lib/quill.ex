@@ -1,7 +1,5 @@
 defmodule Quill do
-  @moduledoc """
-  Documentation for Quill.
-  """
+  @moduledoc Quill.MixProject.project()[:description]
 
   alias Quill.{Builder, Encoder}
 

@@ -58,6 +58,7 @@ defmodule Quill do
   defp level_priority(:debug), do: 10
   defp level_priority(:info), do: 20
   defp level_priority(:notice), do: 30
+  defp level_priority(:warn), do: 40
   defp level_priority(:warning), do: 40
   defp level_priority(:error), do: 50
   defp level_priority(:critical), do: 60

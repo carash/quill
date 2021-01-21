@@ -2,7 +2,7 @@ defmodule Quill.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/carash/quill"
-  @version "0.2.2"
+  @version "0.2.3"
 
   def project do
     [

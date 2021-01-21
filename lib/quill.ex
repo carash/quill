@@ -71,6 +71,7 @@ defmodule Quill do
 
   defp default_state do
     %{
+      name: "app",
       level: :info,
       io_device: :stdio,
       priority_fields: [], # Use atoms as prioritized field names

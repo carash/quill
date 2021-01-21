@@ -22,6 +22,7 @@ defmodule Quill.MixProject do
   defp deps do
     [
       {:jason, "~> 1.2"},
+      {:logfmt, "~> 3.3.1"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end

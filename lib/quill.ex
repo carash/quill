@@ -41,7 +41,7 @@ defmodule Quill do
         %{}
         |> Builder.add_base_fields(message, level, timestamp, state)
         |> Builder.add_metadata_fields(metadata, state)
-        |> Encoder.encode()
+        |> Encoder.encode(state)
         |> output_log(state)
       rescue
         e -> output_error(e, state)
@@ -73,6 +73,8 @@ defmodule Quill do
     %{
       level: :info,
       io_device: :stdio,
+      priority_fields: [], # Use atoms as prioritized field names
+      log_format: :json, # Valid values are :json or :logfmt
       log_error: true,
       metadata: nil,
       version: 0,

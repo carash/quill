@@ -25,8 +25,6 @@ defmodule Quill do
     {:ok, state}
   end
 
-
-
   def handle_event(:flush, state) do
     {:ok, state}
   end
@@ -35,7 +33,10 @@ defmodule Quill do
     {:ok, state}
   end
 
-  def handle_event({level, _, {Logger, message, timestamp, metadata}}, state = %{level: min_level}) do
+  def handle_event(
+        {level, _, {Logger, message, timestamp, metadata}},
+        state = %{level: min_level}
+      ) do
     if level_priority(level) >= level_priority(min_level) do
       try do
         %{}
@@ -47,10 +48,9 @@ defmodule Quill do
         e -> output_error(e, state)
       end
     end
+
     {:ok, state}
   end
-
-
 
   defp level_priority(:trace), do: 0
   defp level_priority(:debug), do: 10
@@ -74,15 +74,17 @@ defmodule Quill do
       name: "app",
       level: :info,
       io_device: :stdio,
-      priority_fields: [], # Use atoms as prioritized field names
-      log_format: :json, # Valid values are :json or :logfmt
+      # Use atoms as prioritized field names
+      priority_fields: [],
+      # Valid values are :json or :logfmt
+      log_format: :json,
       log_error: true,
       metadata: nil,
       version: 0,
       custom_censor_regex: nil,
       email_censor_type: nil,
       phone_number_censor_type: nil,
-      phone_number_prefix: [],
+      phone_number_prefix: []
     }
   end
 

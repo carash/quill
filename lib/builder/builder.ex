@@ -12,24 +12,25 @@ defmodule Quill.Builder do
     |> Map.merge(%{
       name: get_name(config),
       level: level,
-      message: message
-               |> censor_regex(config.custom_censor_regex)
-               |> censor_email(config.email_censor_type)
-               |> censor_phone_number(config.phone_number_censor_type, config.phone_number_prefix),
+      message:
+        message
+        |> censor_regex(config.custom_censor_regex)
+        |> censor_email(config.email_censor_type)
+        |> censor_phone_number(config.phone_number_censor_type, config.phone_number_prefix),
       timestamp: get_formatted_timestamp(timestamp),
-      version: get_version(config),
+      version: get_version(config)
     })
   end
 
   def add_metadata_fields(data, metadata, config) do
     data
-    |> Map.merge(metadata
-                 |> filter_metadata(config)
-                 |> Enum.into(%{})
-                 |> Map.delete(:timestamp))
+    |> Map.merge(
+      metadata
+      |> filter_metadata(config)
+      |> Enum.into(%{})
+      |> Map.delete(:timestamp)
+    )
   end
-
-
 
   def censor_regex(message, nil) do
     message
@@ -68,7 +69,9 @@ defmodule Quill.Builder do
   def censor_phone_number(message, :partial, area_code) do
     "(#{Regex.replace(~r/\+/, area_code, "\\+")})(\\d+)"
     |> Regex.compile!()
-    |> Regex.replace(message, fn _, code, number -> "#{code}***#{String.slice(number, -3..-1)}" end)
+    |> Regex.replace(message, fn _, code, number ->
+      "#{code}***#{String.slice(number, -3..-1)}"
+    end)
   end
 
   def censor_phone_number(message, :full, area_code) do
@@ -76,8 +79,6 @@ defmodule Quill.Builder do
     |> Regex.compile!()
     |> Regex.replace(message, fn _, _, _ -> "***" end)
   end
-
-
 
   defp get_name(config) do
     config.name
